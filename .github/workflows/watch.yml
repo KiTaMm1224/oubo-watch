@@ -1,0 +1,43 @@
+name: 応募ウォッチ
+
+on:
+  schedule:
+    - cron: "23 8 * * *"   # 毎日17:23（日本時間）。Claude の「応募チャンス」（18:19）より前に作る
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "watch.py"
+      - "sources.json"
+      - ".github/workflows/watch.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oubo-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: ライブラリを入れる
+        run: pip install --disable-pip-version-check -q requests==2.32.3 beautifulsoup4==4.12.3
+      - name: 募集の一覧を見る
+        run: python watch.py
+      - name: 結果を保存する
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then echo "変更なし"; exit 0; fi
+          git commit -m "watch $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')"
+          git pull --rebase --autostash || true
+          git push

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "bpc",
+    "name": "ビジネスプランコンテスト情報（大学生向け2026）",
+    "urls": ["https://business-plan-contest.com/introduce/2026businessplan_university/"],
+    "detail": "^https?://business-plan-contest\\.com/contest\\d+$",
+    "use_heading": true
+  },
+  {
+    "id": "kikkake_open",
+    "name": "きっかけポータル 募集中",
+    "urls": ["https://kikkakeportal.com/opportunity-search?kp_search=1&kp_openstatus=open"],
+    "pages": "https://kikkakeportal.com/opportunity-search/page/{n}?kp_search=1&kp_openstatus=open",
+    "max_pages": 15,
+    "detail": "^https?://kikkakeportal\\.com/\\d{4}/\\d{2}/\\d{2}/\\d+$"
+  },
+  {
+    "id": "kikkake_recent",
+    "name": "きっかけポータル 新着・更新",
+    "urls": ["https://kikkakeportal.com/opportunity-search?kp_recent=1"],
+    "pages": "https://kikkakeportal.com/opportunity-search/page/{n}?kp_recent=1",
+    "max_pages": 3,
+    "detail": "^https?://kikkakeportal\\.com/\\d{4}/\\d{2}/\\d{2}/\\d+$"
+  },
+  {
+    "id": "kikkake_abroad",
+    "name": "きっかけポータル 海外プロジェクト",
+    "urls": ["https://kikkakeportal.com/category/find_project/project_abroad"],
+    "pages": "https://kikkakeportal.com/category/find_project/project_abroad/page/{n}",
+    "max_pages": 15,
+    "detail": "^https?://kikkakeportal\\.com/\\d{4}/\\d{2}/\\d{2}/\\d+$"
+  },
+  {
+    "id": "jdn_idea",
+    "name": "JDN アイデア",
+    "urls": ["https://compe.japandesign.ne.jp/category/idea/"],
+    "pages": "https://compe.japandesign.ne.jp/category/idea/page/{n}/",
+    "max_pages": 30,
+    "detail": "^https?://compe\\.japandesign\\.ne\\.jp/[a-z0-9]+(?:-[a-z0-9]+)+$",
+    "exclude": "(privacy|policy|about|contact|sitemap|terms|faq|guide|how-?to|company|advertis|mail-?magazine|newsletter|login|register|mypage)"
+  },
+  {
+    "id": "jdn_business",
+    "name": "JDN アイデア（ビジネス）",
+    "urls": ["https://compe.japandesign.ne.jp/category/idea/%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9/"],
+    "pages": "https://compe.japandesign.ne.jp/category/idea/%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9/page/{n}/",
+    "max_pages": 10,
+    "detail": "^https?://compe\\.japandesign\\.ne\\.jp/[a-z0-9]+(?:-[a-z0-9]+)+$",
+    "exclude": "(privacy|policy|about|contact|sitemap|terms|faq|guide|how-?to|company|advertis|mail-?magazine|newsletter|login|register|mypage)"
+  },
+  {
+    "id": "koubo_college",
+    "name": "公募ガイド 大学生向け",
+    "urls": ["https://koubo.jp/student/college"],
+    "detail": "^https?://koubo\\.jp/contest/\\d+$"
+  },
+  {
+    "id": "koubo_student",
+    "name": "公募ガイド 学生向け",
+    "urls": ["https://koubo.jp/student/all"],
+    "detail": "^https?://koubo\\.jp/contest/\\d+$"
+  },
+  {
+    "id": "koubo_thesis",
+    "name": "公募ガイド 論文",
+    "urls": ["https://koubo.jp/category/writing/thesis"],
+    "detail": "^https?://koubo\\.jp/contest/\\d+$"
+  },
+  {
+    "id": "sterfield",
+    "name": "Sterfield",
+    "urls": ["https://compe.sterfield.jp/", "https://compe.sterfield.jp/new", "https://compe.sterfield.jp/deadline"],
+    "detail": "^https?://compe\\.sterfield\\.jp/[a-z0-9]+(?:-[a-z0-9]+)*$",
+    "exclude": "^https?://compe\\.sterfield\\.jp/(new|deadline|rank|ranking|editor|category|tag|page|author|feed|about|contact|privacy|privacy-policy|sitemap|search|company|terms|faq|login|mypage|news|guide|howto|mail|form|inquiry)$"
+  },
+  {
+    "id": "compedia",
+    "name": "Compedia",
+    "urls": ["https://compedia.jp/contests/", "https://compedia.jp/new/"],
+    "pages": "https://compedia.jp/contests?page={n}",
+    "max_pages": 10,
+    "detail": "^https?://compedia\\.jp/\\d+$"
+  },
+  {
+    "id": "jetro_jstarx",
+    "type": "page",
+    "name": "ジェトロ J-StarX",
+    "urls": ["https://www.jetro.go.jp/services/j-starx/"]
+  },
+  {
+    "id": "cao_youth",
+    "type": "page",
+    "name": "内閣府 青年国際交流",
+    "urls": ["https://www8.cao.go.jp/youth/kouryu/nihon_sanka.html"]
+  },
+  {
+    "id": "tomodachi",
+    "type": "page",
+    "name": "TOMODACHI",
+    "urls": ["https://usjapantomodachi.org/ja/"]
+  }
+]
