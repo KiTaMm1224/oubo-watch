@@ -2,7 +2,7 @@ name: 応募ウォッチ
 
 on:
   schedule:
-    - cron: "23 8 * * *"   # 毎日17:23（日本時間）。Claude の「応募チャンス」（18:19）より前に作る
+    - cron: "23 6 * * *"   # 毎日15:23（日本時間）。GitHub の定時実行は1時間ほど遅れることがあるので、Claude の「応募チャンス」（18:19）より余裕をもって前に作る
   workflow_dispatch:
   push:
     branches: [main]
