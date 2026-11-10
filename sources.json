@@ -67,6 +67,13 @@
     "detail": "^https?://koubo\\.jp/contest/\\d+$"
   },
   {
+    "id": "koubo_planning",
+    "name": "公募ガイド 企画・ビジネスプラン",
+    "urls": ["https://koubo.jp/category/planning/planning"],
+    "detail": "^https?://koubo\\.jp/contest/\\d+$",
+    "first_run_new": true
+  },
+  {
     "id": "sterfield",
     "name": "Sterfield",
     "urls": ["https://compe.sterfield.jp/", "https://compe.sterfield.jp/new", "https://compe.sterfield.jp/deadline"],

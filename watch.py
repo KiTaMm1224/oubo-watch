@@ -260,8 +260,9 @@ def run_list(src, prev, today):
     prev_count = (prev or {}).get("count", 0)
     if prev_count and len(items) < prev_count * SHRINK_LIMIT:
         raise RuntimeError(f"件数が前回の半分未満（{prev_count}件 → {len(items)}件）。取り損ねの可能性")
-    baseline = prev is None
-    known = {} if baseline else dict(prev.get("items", {}))
+    # first_run_new：一覧を新しく足したとき、初回の分も「新着」として出す（応募ナビにまだないものを確かめてもらうため）
+    baseline = prev is None and not src.get("first_run_new")
+    known = dict((prev or {}).get("items", {}))
     new_today = 0
     for url, rec in items.items():
         dates = sorted(rec["dates"])
@@ -285,6 +286,8 @@ def run_list(src, prev, today):
         del known[url]
     if baseline:
         baseline_on = today
+    elif prev is None or ("baseline_on" in prev and prev["baseline_on"] is None):
+        baseline_on = None  # first_run_new：基準づくりの日はない
     else:  # 基準を作った日（同じ日のうちは新着の判定をしない）
         baseline_on = prev.get("baseline_on") or min(
             [r["first_seen"] for r in known.values() if r.get("baseline") and r.get("first_seen")] or [today])
@@ -466,7 +469,7 @@ def main(now=None):
                 window_new = sum(1 for r in st["items"].values()
                                  if not r.get("baseline") and days_ago(r.get("first_seen"), today) <= WINDOW_DAYS)
                 state["sources"][sid] = st
-                if prev is None or st.get("baseline_on") == today:
+                if (prev is None and not src.get("first_run_new")) or st.get("baseline_on") == today:
                     status[sid] = {"ok": False, "mark": "★",
                                    "text": f"基準づくり（今日が初回で{st['count']}件を記録。新着の判定は明日から）"}
                 elif window_new > MAX_LIST:
