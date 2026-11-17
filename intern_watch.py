@@ -118,7 +118,12 @@ def classify(title, occ, tags):
 def ut_list():
     items, pages = {}, 0
     for n in range(1, 15):
-        html = get(UT_LIST + (f"?page={n}" if n > 1 else ""))
+        try:
+            html = get(UT_LIST + (f"?page={n}" if n > 1 else ""))
+        except RuntimeError as e:
+            if n > 1 and "404" in str(e):
+                break       # 最後のページの次は404になる
+            raise
         cards = BeautifulSoup(html, "html.parser").select("article.recruitment-card-v2")
         added = 0
         for c in cards:
@@ -171,7 +176,12 @@ def ut_detail(url):
 def z_list(url):
     items, pages = {}, 0
     for n in range(1, 15):
-        html = get(url + (f"&page={n}" if n > 1 else ""))
+        try:
+            html = get(url + (f"&page={n}" if n > 1 else ""))
+        except RuntimeError as e:
+            if n > 1 and "404" in str(e):
+                break
+            raise
         secs = BeautifulSoup(html, "html.parser").select("section.i-job-item")
         added = 0
         for s in secs:
@@ -236,6 +246,8 @@ def main():
     os.makedirs("data", exist_ok=True)
     baseline = not os.path.exists(STATE)
     state = {"items": {}, "watch": {}} if baseline else json.load(open(STATE, encoding="utf-8"))
+    seen_sites = set(state.get("sites_ok", [])) if "sites_ok" in state else \
+        {v.get("site") for v in state.get("items", {}).values()}
     prev = state["items"]
     status, found, ok_sites = [], {}, set()
 
@@ -281,7 +293,7 @@ def main():
         else:
             it["first_seen"] = p.get("first_seen", today) if p else today
             it["since"] = today
-            it["baseline"] = baseline
+            it["baseline"] = baseline or it["site"] not in seen_sites
             it["reopened"] = bool(p)
             it["info"] = p.get("info", "") if p else ""
         it["status"] = "open"
@@ -333,6 +345,8 @@ def main():
             new_state_items.setdefault(k, p)
     state["items"] = new_state_items
     state["updated"] = now.strftime("%Y-%m-%d %H:%M")
+    state["sites_ok"] = sorted(seen_sites | ok_sites)
+    first_sites = sorted(ok_sites - seen_sites) if not baseline else []
     with open(STATE, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=1, sort_keys=True)
 
@@ -346,6 +360,8 @@ def main():
            "種類：本命＝コンサル・分析×AI／コンサル系／AI企画／AI・IT営業", ""]
     if baseline:
         out += ["※ 初回の基準づくり：今回の候補は新着に数えない（次回から差分を出す）", ""]
+    elif first_sites:
+        out += [f"※ {'・'.join(first_sites)} は今回はじめて取得できたので、その候補は新着に数えない（次回から差分を出す）", ""]
     out += ["## 見張り"] + watch_lines + [""]
     news = sorted([it for it in cands.values() if it.get("since", "") >= cutoff
                    and not it.get("baseline") and it.get("status") == "open"], key=key)
